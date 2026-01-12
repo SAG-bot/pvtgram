@@ -7,23 +7,32 @@
   <link rel="stylesheet" href="style.css" />
 </head>
 <body>
-  <div id="app">
+
+  <!-- AUTH SCREEN -->
+  <div id="authScreen" class="card">
     <h1>PrivateGram</h1>
+    <p class="subtitle">Just us.</p>
 
-    <div id="auth">
-      <input id="email" type="email" placeholder="Email" />
-      <input id="password" type="password" placeholder="Password" />
-      <button onclick="login()">Login</button>
-    </div>
+    <input type="email" id="email" placeholder="Email" />
+    <input type="password" id="password" placeholder="Password" />
 
-    <div id="main" style="display:none;">
-      <h2>Upload Video</h2>
-      <input type="file" id="videoFile" accept="video/*" />
-      <button onclick="uploadVideo()">Upload</button>
+    <button id="loginBtn">Login</button>
+    <button id="signupBtn" class="secondary">Sign up</button>
 
-      <h2>Feed</h2>
-      <div id="feed"></div>
-    </div>
+    <p id="authError" class="error"></p>
+  </div>
+
+  <!-- APP SCREEN -->
+  <div id="appScreen" class="hidden">
+    <header>
+      <h2>PrivateGram</h2>
+      <button id="logoutBtn">Logout</button>
+    </header>
+
+    <main>
+      <p class="welcome">You are logged in.</p>
+      <p class="muted">Feed, chat, and uploads will appear here.</p>
+    </main>
   </div>
 
   <script type="module" src="app.js"></script>
