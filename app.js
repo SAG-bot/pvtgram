@@ -1,63 +1,85 @@
+// 🔥 Firebase config
+//const firebaseConfig = {
+   //apiKey: "AIzaSyD8_wAPvPzJ8r34FGrcdYae26EhmKz-mtY",
+  //authDomain: "privategram-706f4.firebaseapp.com",
+ // projectId: "privategram-706f4",
+ /// storageBucket: "privategram-706f4.firebasestorage.app",
+  //messagingSenderId: "321530348112",
+  //appId: "1:321530348112:web:dc95df6717752ba69b0755"
+};
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-import { getAuth, signInWithEmailAndPassword, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
-import { getStorage, ref, uploadBytesResumable, getDownloadURL } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-storage.js";
-import { getFirestore, collection, addDoc, onSnapshot, query, orderBy } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+import {
+  getAuth,
+  signInWithEmailAndPassword,
+  createUserWithEmailAndPassword,
+  signOut,
+  onAuthStateChanged
+} from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
 
-// 🔥 REPLACE WITH YOUR FIREBASE CONFIG
+/* 🔐 YOUR FIREBASE CONFIG */
 const firebaseConfig = {
-   apiKey: "AIzaSyD8_wAPvPzJ8r34FGrcdYae26EhmKz-mtY",
+  apiKey: "AIzaSyD8_wAPvPzJ8r34FGrcdYae26EhmKz-mtY",
   authDomain: "privategram-706f4.firebaseapp.com",
   projectId: "privategram-706f4",
-  storageBucket: "privategram-706f4.firebasestorage.app",
-  messagingSenderId: "321530348112",
   appId: "1:321530348112:web:dc95df6717752ba69b0755"
 };
 
+/* INIT */
 const app = initializeApp(firebaseConfig);
-const auth = getAuth();
-const storage = getStorage();
-const db = getFirestore();
+const auth = getAuth(app);
 
-window.login = async function () {
-  const email = document.getElementById("email").value;
-  const password = document.getElementById("password").value;
-  await signInWithEmailAndPassword(auth, email, password);
-};
+/* ELEMENTS */
+const authScreen = document.getElementById("authScreen");
+const appScreen = document.getElementById("appScreen");
 
-onAuthStateChanged(auth, (user) => {
-  if (user) {
-    document.getElementById("auth").style.display = "none";
-    document.getElementById("main").style.display = "block";
-    loadFeed();
+const emailInput = document.getElementById("email");
+const passwordInput = document.getElementById("password");
+
+const loginBtn = document.getElementById("loginBtn");
+const signupBtn = document.getElementById("signupBtn");
+const logoutBtn = document.getElementById("logoutBtn");
+const authError = document.getElementById("authError");
+
+/* LOGIN */
+loginBtn.addEventListener("click", async () => {
+  authError.textContent = "";
+  try {
+    await signInWithEmailAndPassword(
+      auth,
+      emailInput.value.trim(),
+      passwordInput.value
+    );
+  } catch (err) {
+    authError.textContent = err.message;
   }
 });
 
-window.uploadVideo = function () {
-  const file = document.getElementById("videoFile").files[0];
-  if (!file) return;
+/* SIGNUP */
+signupBtn.addEventListener("click", async () => {
+  authError.textContent = "";
+  try {
+    await createUserWithEmailAndPassword(
+      auth,
+      emailInput.value.trim(),
+      passwordInput.value
+    );
+  } catch (err) {
+    authError.textContent = err.message;
+  }
+});
 
-  const videoRef = ref(storage, "videos/" + Date.now() + "_" + file.name);
-  const uploadTask = uploadBytesResumable(videoRef, file);
+/* LOGOUT */
+logoutBtn.addEventListener("click", async () => {
+  await signOut(auth);
+});
 
-  uploadTask.on("state_changed", null, console.error, async () => {
-    const url = await getDownloadURL(uploadTask.snapshot.ref);
-    await addDoc(collection(db, "posts"), {
-      videoUrl: url,
-      createdAt: Date.now()
-    });
-  });
-};
-
-function loadFeed() {
-  const q = query(collection(db, "posts"), orderBy("createdAt", "desc"));
-  onSnapshot(q, (snapshot) => {
-    const feed = document.getElementById("feed");
-    feed.innerHTML = "";
-    snapshot.forEach(doc => {
-      const v = document.createElement("video");
-      v.src = doc.data().videoUrl;
-      v.controls = true;
-      feed.appendChild(v);
-    });
-  });
-}
+/* AUTH STATE */
+onAuthStateChanged(auth, (user) => {
+  if (user) {
+    authScreen.classList.add("hidden");
+    appScreen.classList.remove("hidden");
+  } else {
+    authScreen.classList.remove("hidden");
+    appScreen.classList.add("hidden");
+  }
+});
