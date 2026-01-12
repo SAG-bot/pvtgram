@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>PrivateGram</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <div id="app">
+    <h1>PrivateGram</h1>
+
+    <div id="auth">
+      <input id="email" type="email" placeholder="Email" />
+      <input id="password" type="password" placeholder="Password" />
+      <button onclick="login()">Login</button>
+    </div>
+
+    <div id="main" style="display:none;">
+      <h2>Upload Video</h2>
+      <input type="file" id="videoFile" accept="video/*" />
+      <button onclick="uploadVideo()">Upload</button>
+
+      <h2>Feed</h2>
+      <div id="feed"></div>
+    </div>
+  </div>
+
+  <script type="module" src="app.js"></script>
+</body>
+</html>
