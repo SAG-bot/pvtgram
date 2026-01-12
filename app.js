@@ -5,12 +5,12 @@ import { getFirestore, collection, addDoc, onSnapshot, query, orderBy } from "ht
 
 // 🔥 REPLACE WITH YOUR FIREBASE CONFIG
 const firebaseConfig = {
-  apiKey: "YOUR_API_KEY",
-  authDomain: "YOUR_PROJECT.firebaseapp.com",
-  projectId: "YOUR_PROJECT_ID",
-  storageBucket: "YOUR_PROJECT.appspot.com",
-  messagingSenderId: "SENDER_ID",
-  appId: "APP_ID"
+   apiKey: "AIzaSyD8_wAPvPzJ8r34FGrcdYae26EhmKz-mtY",
+  authDomain: "privategram-706f4.firebaseapp.com",
+  projectId: "privategram-706f4",
+  storageBucket: "privategram-706f4.firebasestorage.app",
+  messagingSenderId: "321530348112",
+  appId: "1:321530348112:web:dc95df6717752ba69b0755"
 };
 
 const app = initializeApp(firebaseConfig);
